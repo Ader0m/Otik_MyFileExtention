@@ -161,7 +161,7 @@ namespace Otik_MyFileExtention
             FileStream fileStreamInput = File.OpenWrite(_archivePath);
 
             fileStreamInput.Position = fileStreamInput.Length;
-            fileStreamInput.Write(Encoding.UTF8.GetBytes("\n}\n"), 0, 2);
+            fileStreamInput.Write(Encoding.UTF8.GetBytes("\n}"), 0, 2);
 
             fileStreamInput.Close();
         }

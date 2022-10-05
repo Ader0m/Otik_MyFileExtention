@@ -10,6 +10,7 @@ namespace Otik_MyFileExtention
     {
         public byte[] Task(byte[] none)
         {
+            File.AppendAllText(Encode.Instence.ArchivePath, "\n");
             File.AppendAllText(Encode.Instence.ArchivePath, FileCollector.Header.ToString()); 
             return none;
         }
