@@ -40,7 +40,7 @@ namespace Otik_MyFileExtention
             else
             {
                 ArchiveFile(Storage.NameFile);
-                EndWriteSegment();
+                //EndWriteSegment();
             }            
         }     
 
@@ -89,7 +89,7 @@ namespace Otik_MyFileExtention
                     }               
             }
 
-            EndWriteSegment();
+            //EndWriteSegment();
 
             #region LocalFunction
             void FileForeach()
@@ -97,7 +97,7 @@ namespace Otik_MyFileExtention
                 foreach (string fil in files)
                 {               
                     ArchiveFile(fil);
-                    EndWriteSegment();
+                    //EndWriteSegment();
                 }
             }
 

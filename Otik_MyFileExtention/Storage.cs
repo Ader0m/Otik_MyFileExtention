@@ -69,15 +69,18 @@ namespace Otik_MyFileExtention
 
             public byte[] ToWrite()
             {
-                byte[] data = new byte[StartInfoByte];
-                byte[] temp = new byte[4];
+                string startHeader = "\n{\n";
+                byte[] signa = new byte[4];
+                byte[] data;
 
-                temp[0] = Signature[0];
-                temp[1] = Signature[1];
-                temp[2] = Signature[2];
-                temp[3] = Signature[3];
+                signa[0] = Signature[0];
+                signa[1] = Signature[1];
+                signa[2] = Signature[2];
+                signa[3] = Signature[3];
       
-                data = temp.Concat(Encoding.UTF8.GetBytes(ToStringToWrite())).ToArray();
+                data = Encoding.UTF8.GetBytes(startHeader).Concat
+                        (signa.Concat(Encoding.UTF8.GetBytes(ToStringToWrite())).ToArray()
+                        ).ToArray();
                 
 
                 return data;
