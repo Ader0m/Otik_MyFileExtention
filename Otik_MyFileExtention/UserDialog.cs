@@ -37,6 +37,7 @@
             Console.SetWindowSize(46, 20);
 
             Encode encode = new Encode();
+            Decoder decoder = new Decoder();
             StartDialog();
         }
 
@@ -90,6 +91,7 @@
                             }
                         case 3:
                             {
+                                Decoder.Instence.Start();
                                 break;
                             }
                         case 0:
