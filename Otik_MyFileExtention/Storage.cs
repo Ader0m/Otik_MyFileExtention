@@ -50,8 +50,8 @@ namespace Otik_MyFileExtention
                                 (sizeof(int) * 4) +
                                 4 + // byte mass
                                 1 + // bool
-                                4 + // {
-                                11; // \n
+                                3 + // {
+                                12; // \n
             }
 
             public bool CheckSignature()
@@ -71,17 +71,28 @@ namespace Otik_MyFileExtention
             {
                 string startHeader = "\n{\n";
                 byte[] signa = new byte[4];
+                byte[] temp = new byte[1];
                 byte[] data;
 
                 signa[0] = Signature[0];
                 signa[1] = Signature[1];
                 signa[2] = Signature[2];
                 signa[3] = Signature[3];
-      
-                data = Encoding.UTF8.GetBytes(startHeader).Concat
-                        (signa.Concat(Encoding.UTF8.GetBytes(ToStringToWrite())).ToArray()
-                        ).ToArray();
+
                 
+
+                data = Encoding.UTF8.GetBytes(startHeader).Concat(signa).ToArray();
+                data = data.Concat(Encoding.UTF8.GetBytes("\n")).ToArray();
+
+                temp[0] = Convert.ToByte(FileOrDirectory);
+                Console.WriteLine("data l " + data.Length);
+                data = data.Concat(temp).ToArray();
+                Console.WriteLine("data l " + data.Length);
+
+
+                data = data.Concat(Encoding.UTF8.GetBytes(ToStringToWrite())).ToArray();
+                Console.WriteLine("data " + data[8]);
+
 
                 return data;
             }
@@ -101,8 +112,7 @@ namespace Otik_MyFileExtention
 
             private string ToStringToWrite()
             {
-                return "\n" + 
-                    FileOrDirectory.ToString() + "\n" + 
+                return "\n" +              
                     Name + "\n" + 
                     Version + "\n" + 
                     Arhive + "\n" + 

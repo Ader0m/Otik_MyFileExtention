@@ -11,9 +11,11 @@ namespace Otik_MyFileExtention
         public byte[] Task(byte[] none)
         {
             FileStream fs = File.OpenWrite(Encode.Instence.ArchivePath);
+            byte[] toWrite = FileCollector.Header.ToWrite();
+
 
             fs.Position = fs.Length;
-            fs.Write(FileCollector.Header.ToWrite(), 0, FileCollector.Header.ToWrite().Length);
+            fs.Write(toWrite, 0, toWrite.Length);
 
             fs.Close();
 
