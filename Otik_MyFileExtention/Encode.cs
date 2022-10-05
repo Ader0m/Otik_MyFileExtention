@@ -106,7 +106,6 @@ namespace Otik_MyFileExtention
                 foreach (string dir in dirs)
                 {
                     ArchiverRecursion(dir.Replace(Directory.GetCurrentDirectory() + @"\", ""));
-                    EndWriteSegment();
                 }
             }
             #endregion
