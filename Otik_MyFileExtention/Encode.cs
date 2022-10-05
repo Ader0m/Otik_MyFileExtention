@@ -40,6 +40,7 @@ namespace Otik_MyFileExtention
             else
             {
                 ArchiveFile(Storage.NameFile);
+                EndWriteSegment();
             }            
         }
 
