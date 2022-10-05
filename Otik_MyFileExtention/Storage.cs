@@ -51,7 +51,7 @@ namespace Otik_MyFileExtention
                                 4 + // byte mass
                                 1 + // bool
                                 4 + // {
-                                11;  // \n 
+                                11; // \n
             }
 
             public bool CheckSignature()
@@ -67,17 +67,44 @@ namespace Otik_MyFileExtention
                 return true;
             }
 
+            public byte[] ToWrite()
+            {
+                byte[] data = new byte[StartInfoByte];
+                byte[] temp = new byte[4];
+
+                temp[0] = Signature[0];
+                temp[1] = Signature[1];
+                temp[2] = Signature[2];
+                temp[3] = Signature[3];
+      
+                data = temp.Concat(Encoding.UTF8.GetBytes(ToStringToWrite())).ToArray();
+                
+
+                return data;
+            }
+
             public override string ToString()
             {
-                return "{\n{\n" +
-                    Signature[0].ToString() + Signature[1].ToString() + Signature[2].ToString() + Signature[3].ToString() + "\n" + // 9
+                return "\n{\n{\n" + // начало в HeaderTask
+                    Signature[0].ToString() + " " + Signature[1].ToString() + " " + Signature[2].ToString() + " " + Signature[3].ToString() + "\n" + // 9
                     FileOrDirectory.ToString() + "\n" + // 1 + 1
                     Name + "\n" + // 7 + 1
                     Version + "\n" + // 4 + 1
                     Arhive + "\n" + // 4 + 1
                     Protect + "\n" + // 4 + 1
                     StartInfoByte.ToString() + "\n" + "}\n" + "{\n"; // 4 + 1 + 1 + 1
-                // 43
+                // 46
+            }
+
+            private string ToStringToWrite()
+            {
+                return "\n" + 
+                    FileOrDirectory.ToString() + "\n" + 
+                    Name + "\n" + 
+                    Version + "\n" + 
+                    Arhive + "\n" + 
+                    Protect + "\n" + 
+                    StartInfoByte.ToString() + "\n" + "}\n" + "{\n";
             }
         }
     }

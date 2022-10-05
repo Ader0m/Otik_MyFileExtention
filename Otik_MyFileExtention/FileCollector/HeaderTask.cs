@@ -10,8 +10,15 @@ namespace Otik_MyFileExtention
     {
         public byte[] Task(byte[] none)
         {
-            File.AppendAllText(Encode.Instence.ArchivePath, "\n");
-            File.AppendAllText(Encode.Instence.ArchivePath, FileCollector.Header.ToString()); 
+            File.AppendAllText(Encode.Instence.ArchivePath, "\n{\n{\n"); // потом добавить в ToWrite
+            FileStream fs = File.OpenWrite(Encode.Instence.ArchivePath);
+
+            fs.Position = fs.Length;
+            fs.Write(FileCollector.Header.ToWrite(), 0, FileCollector.Header.ToWrite().Length);
+
+            fs.Close();
+
+
             return none;
         }
     }
