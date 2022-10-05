@@ -42,9 +42,7 @@ namespace Otik_MyFileExtention
                 ArchiveFile(Storage.NameFile);
                 EndWriteSegment();
             }            
-        }
-
-        
+        }     
 
         private void ArchiverRecursion(string filePath)
         {
@@ -93,14 +91,12 @@ namespace Otik_MyFileExtention
 
             EndWriteSegment();
 
-
+            #region LocalFunction
             void FileForeach()
             {
                 foreach (string fil in files)
-                {
-                    string fil1 = fil.Replace(Directory.GetCurrentDirectory(), "");
-                    Console.WriteLine(fil1);
-                    ArchiveFile(fil1);
+                {               
+                    ArchiveFile(fil);
                     EndWriteSegment();
                 }
             }
@@ -109,10 +105,11 @@ namespace Otik_MyFileExtention
             {
                 foreach (string dir in dirs)
                 {
-                    ArchiverRecursion(dir);
+                    ArchiverRecursion(dir.Replace(Directory.GetCurrentDirectory() + @"\", ""));
                     EndWriteSegment();
                 }
             }
+            #endregion
         }
 
         private void ArchiveFile(string filePath)
@@ -122,7 +119,7 @@ namespace Otik_MyFileExtention
                 FileCollector fileCollector = new FileCollector(0);
 
                 FileCollector.FilePath = filePath;
-                FileCollector.Header.Name = filePath.Replace(Directory.GetCurrentDirectory(), "");
+                FileCollector.Header.Name = filePath.Replace(Directory.GetCurrentDirectory() + @"\", "");
                 FileCollector.Header.FileOrDirectory = false;
                 FileCollector.Header.Signature = Storage.Signature;                
                 FileCollector.Header.SolveStartInfoByte();
@@ -164,7 +161,7 @@ namespace Otik_MyFileExtention
             FileStream fileStreamInput = File.OpenWrite(_archivePath);
 
             fileStreamInput.Position = fileStreamInput.Length;
-            fileStreamInput.Write(Encoding.UTF8.GetBytes("\n}"), 0, 2);
+            fileStreamInput.Write(Encoding.UTF8.GetBytes("\n}\n"), 0, 2);
 
             fileStreamInput.Close();
         }

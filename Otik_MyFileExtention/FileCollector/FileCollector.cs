@@ -47,7 +47,6 @@ namespace Otik_MyFileExtention
 
             foreach (var task in _tasks)
             {
-                Console.Write("+");
                 content = task.Task(content);
             }
 
