@@ -32,6 +32,7 @@ namespace Otik_MyFileExtention
             file = new byte[fileStreamInput.Length];
             fileStreamInput.Read(file);
             fileStreamInput.Close();
+            int offset = 2;
             for (int byt = 0; byt < file.Length; byt++)
             {
                 byt += 3;
@@ -75,6 +76,7 @@ namespace Otik_MyFileExtention
                 Console.WriteLine("INFO ");
 
                 byt = h.StartInfoByte;
+                byt += 3;
                 count = 0;
                 while (file[byt + count] != 10)
                     count++;
