@@ -99,6 +99,7 @@ namespace Otik_MyFileExtention
                     fileStreamInput.Write(info);
                     fileStreamInput.Close();
                 }
+
                 byt += count + 1;
             }
         }
