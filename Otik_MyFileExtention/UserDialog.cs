@@ -91,15 +91,15 @@
                             }
                         case 3:
                             {
-                                if (Storage.NameFile.Split(".")[1].Equals("iva"))
-                                {
-                                    Decoder.Instence.Start();
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Error: Можно разархивировать файл только формата .iva");
-                                }
-                                
+                                if (!Storage.NameFile.Equals("Введите имя"))
+                                    if (Storage.NameFile.Split(".")[1].Equals("iva"))
+                                    {
+                                        Decoder.Instence.Start();
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Error: Можно разархивировать файл только формата .iva");
+                                    }                                
                                 break;
                             }
                         case 0:

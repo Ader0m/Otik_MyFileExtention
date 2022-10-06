@@ -8,7 +8,7 @@ namespace Otik_MyFileExtention
 {
     internal static class Storage
     {       
-        private static string _nameFile = "bls.iva";
+        private static string _nameFile = "Введите имя";
         private static readonly byte[] _signature = { 0x69, 0x76, 0x61, 0x65 };
         private static readonly int _version = 1;
 
