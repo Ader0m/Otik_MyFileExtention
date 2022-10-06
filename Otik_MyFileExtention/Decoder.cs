@@ -32,10 +32,11 @@ namespace Otik_MyFileExtention
             file = new byte[fileStreamInput.Length];
             fileStreamInput.Read(file);
             fileStreamInput.Close();
-            int offset = 2;
+            int offset = 0;
             for (int byt = 0; byt < file.Length; byt++)
             {
                 byt += 3;
+                //offset += 3;
                 for (int i = byt; i < (byt + 4); i++)
                     h.Signature[i - byt] = file[i];
                 byt += 5;
@@ -74,26 +75,30 @@ namespace Otik_MyFileExtention
                 Console.WriteLine("Protect " + h.Protect);
                 Console.WriteLine("StartInfoByte " + h.StartInfoByte);
                 Console.WriteLine("INFO ");
-
-                byt = h.StartInfoByte;
-                byt += 3;
+                offset += h.StartInfoByte;
+                byt = offset;
                 count = 0;
                 while (file[byt + count] != 10)
                     count++;
                 Console.WriteLine(Encoding.UTF8.GetString(file, byt, count));
                 ReadOnlySpan<byte> info = new ReadOnlySpan<byte>(file, byt, count);
-                if (h.FileOrDirectory)
-                    Directory.CreateDirectory(Directory.GetCurrentDirectory() + @"\" + h.Name);
-                else
+
+                if (h.CheckSignature())
                 {
-                    fileStreamInput = File.Create(Directory.GetCurrentDirectory() + @"\" + h.Name);
-                    fileStreamInput.Close();
-                    fileStreamInput = File.OpenWrite(Directory.GetCurrentDirectory() + @"\" + h.Name);
-                    fileStreamInput.Write(info);
-                    fileStreamInput.Close();
+                    if (h.FileOrDirectory)
+                        Directory.CreateDirectory(Directory.GetCurrentDirectory() + @"\" + h.Name);
+                    else
+                    {
+                        fileStreamInput = File.Create(Directory.GetCurrentDirectory() + @"\" + h.Name);
+                        fileStreamInput.Close();
+                        fileStreamInput = File.OpenWrite(Directory.GetCurrentDirectory() + @"\" + h.Name);
+                        fileStreamInput.Write(info);
+                        fileStreamInput.Close();
+                    }
                 }
 
                 byt += count + 1;
+                offset = byt+1;
             }
         }
     }
