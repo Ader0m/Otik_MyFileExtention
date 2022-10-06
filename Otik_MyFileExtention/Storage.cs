@@ -10,13 +10,15 @@ namespace Otik_MyFileExtention
     {       
         private static string _nameFile = "bla.iva";
         private static readonly byte[] _signature = { 0x69, 0x76, 0x61, 0x65 };
-        public static readonly int Version = 1;
+        private static readonly int _version = 1;
 
         #region Get/Set
 
         public static string NameFile { get { return _nameFile; } set { _nameFile = value; } }
 
-        public static byte[] Signature { get => _signature; }
+        public static byte[] Signature => _signature;
+
+        public static int Version => _version;
 
         #endregion
 
@@ -46,7 +48,7 @@ namespace Otik_MyFileExtention
             /// </summary>
             public void SolveStartInfoByte()
             {
-                StartInfoByte = (Name.Length * sizeof(char)) +
+                 StartInfoByte = (Name.Length * sizeof(char)) +
                                 (sizeof(int) * 4) +
                                 4 + // byte mass
                                 1 + // bool
@@ -70,31 +72,51 @@ namespace Otik_MyFileExtention
             public byte[] ToWrite()
             {
                 string startHeader = "\n{\n";
-                byte[] signa = new byte[4];
-                byte[] temp = new byte[1];
-                byte[] data;
-
-                signa[0] = Signature[0];
-                signa[1] = Signature[1];
-                signa[2] = Signature[2];
-                signa[3] = Signature[3];
-
-                
-
-                data = Encoding.UTF8.GetBytes(startHeader).Concat(signa).ToArray();
-                data = data.Concat(Encoding.UTF8.GetBytes("\n")).ToArray();
-
-                temp[0] = Convert.ToByte(FileOrDirectory);
-                Console.WriteLine("data l " + data.Length);
-                data = data.Concat(temp).ToArray();
-                Console.WriteLine("data l " + data.Length);
+                string endHeader = "\n" + "}\n" + "{\n";
+                int offset;
+                byte[] data = new byte[StartInfoByte];
+                byte[] nameByteMass;
 
 
-                data = data.Concat(Encoding.UTF8.GetBytes(ToStringToWrite())).ToArray();
-                Console.WriteLine("data " + data[8]);
+                data[0] = Signature[0];
+                data[1] = Signature[1];
+                data[2] = Signature[2];
+                data[3] = Signature[3];
+                offset = 4;
 
+                AddBool(FileOrDirectory);
+                AddString(Name);
+                AddInt(Version);
+                AddInt(Arhive);
+                AddInt(Protect);
+                AddString(endHeader);
+
+                data = Encoding.UTF8.GetBytes(startHeader).Concat(data).ToArray();
 
                 return data;
+
+                #region LocalMethod
+
+                void AddInt(int target)
+                {
+                    BitConverter.GetBytes(target).CopyTo(data, offset);
+                    offset += sizeof(int);
+
+                }
+
+                void AddBool(bool target)
+                {
+                    BitConverter.GetBytes(target).CopyTo(data, offset);
+                    offset += sizeof(bool);
+                }
+
+                void AddString(string target)
+                {
+                    nameByteMass = Encoding.UTF8.GetBytes(target);
+                    nameByteMass.CopyTo(data, offset);
+                    offset += nameByteMass.Length;
+                }
+                #endregion
             }
 
             public override string ToString()
@@ -108,16 +130,6 @@ namespace Otik_MyFileExtention
                     Protect + "\n" + // 4 + 1
                     StartInfoByte.ToString() + "\n" + "}\n" + "{\n"; // 4 + 1 + 1 + 1
                 // 46
-            }
-
-            private string ToStringToWrite()
-            {
-                return "\n" +              
-                    Name + "\n" + 
-                    Version + "\n" + 
-                    Arhive + "\n" + 
-                    Protect + "\n" + 
-                    StartInfoByte.ToString() + "\n" + "}\n" + "{\n";
             }
         }
     }
