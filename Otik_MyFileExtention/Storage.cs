@@ -53,7 +53,7 @@ namespace Otik_MyFileExtention
                                 4 + // byte mass
                                 1 + // bool
                                 3 + // {
-                                8; // \n
+                                11; // \n
             }
 
             public bool CheckSignature()
@@ -89,7 +89,7 @@ namespace Otik_MyFileExtention
                 AddString(Name);
 
                 StartInfoByte = StartInfoByte - ((Name.Length * sizeof(char)) - nameByteMass.Length);
-                byte[] fixData = new byte[StartInfoByte];
+                byte[] fixData = new byte[StartInfoByte - 3];
                 for (int i = 0; i < fixData.Length; i++)
                 {
                     fixData[i] = data[i];
