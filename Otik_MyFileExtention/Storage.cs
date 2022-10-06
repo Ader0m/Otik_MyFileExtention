@@ -77,6 +77,30 @@ namespace Otik_MyFileExtention
                 byte[] data = new byte[StartInfoByte];
                 byte[] nameByteMass;
 
+                #region LocalMethod
+
+                void AddInt(int target)
+                {
+                    BitConverter.GetBytes(target).CopyTo(data, offset);
+                    offset += sizeof(int);
+
+                }
+
+                void AddBool(bool target)
+                {
+                    BitConverter.GetBytes(target).CopyTo(data, offset);
+                    offset += sizeof(bool);
+                }
+
+                int AddString(string target)
+                {
+                    nameByteMass = Encoding.UTF8.GetBytes(target);
+                    nameByteMass.CopyTo(data, offset);
+                    offset += nameByteMass.Length;
+
+                    return nameByteMass.Length;
+                }
+                #endregion
 
                 data[0] = Signature[0];
                 data[1] = Signature[1];
@@ -105,39 +129,8 @@ namespace Otik_MyFileExtention
 
                 data = Encoding.UTF8.GetBytes(startHeader).Concat(data).ToArray();                
 
+
                 return data;
-
-                #region LocalMethod
-
-                void AddInt(int target)
-                {
-                    BitConverter.GetBytes(target).CopyTo(data, offset);
-                    offset += sizeof(int);
-
-                }
-
-                void AddBool(bool target)
-                {
-                    BitConverter.GetBytes(target).CopyTo(data, offset);
-                    offset += sizeof(bool);
-                }
-
-                void AddN(string target)
-                {
-                    nameByteMass = Encoding.UTF8.GetBytes(target);
-                    nameByteMass.CopyTo(data, offset);
-                    offset += nameByteMass.Length;
-                }
-
-                int AddString(string target)
-                {
-                    nameByteMass = Encoding.UTF8.GetBytes(target);
-                    nameByteMass.CopyTo(data, offset);
-                    offset += nameByteMass.Length;
-
-                    return nameByteMass.Length;
-                }
-                #endregion
             }
 
             public override string ToString()

@@ -36,7 +36,6 @@ namespace Otik_MyFileExtention
             for (int byt = 0; byt < file.Length; byt++)
             {
                 byt += 3;
-                //offset += 3;
                 for (int i = byt; i < (byt + 4); i++)
                     h.Signature[i - byt] = file[i];
                 byt += 5;
@@ -50,16 +49,16 @@ namespace Otik_MyFileExtention
                 h.Name = Encoding.UTF8.GetString(file, byt, count);
                 byt += count + 1;
 
-                
+
 
                 h.Version = BitConverter.ToInt32(file, byt);
                 byt += 4 + 1;
 
-                
+
                 h.Arhive = BitConverter.ToInt32(file, byt);
                 byt += 4 + 1;
 
-                
+
                 h.Protect = BitConverter.ToInt32(file, byt);
                 byt += 4 + 1;
 
@@ -83,7 +82,7 @@ namespace Otik_MyFileExtention
                 Console.WriteLine(Encoding.UTF8.GetString(file, byt, count));
                 ReadOnlySpan<byte> info = new ReadOnlySpan<byte>(file, byt, count);
 
-                if (h.CheckSignature())
+                if (h.CheckSignature() && h.Version == Storage.Version)
                 {
                     if (h.FileOrDirectory)
                         Directory.CreateDirectory(Directory.GetCurrentDirectory() + @"\" + h.Name);
@@ -95,10 +94,15 @@ namespace Otik_MyFileExtention
                         fileStreamInput.Write(info);
                         fileStreamInput.Close();
                     }
+
+                }
+                else
+                {
+                    Console.WriteLine("Error: Не корректная сигнатура или версия");
                 }
 
                 byt += count + 1;
-                offset = byt+1;
+                offset = byt + 1;
             }
         }
     }

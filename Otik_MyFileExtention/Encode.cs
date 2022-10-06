@@ -18,6 +18,7 @@ namespace Otik_MyFileExtention
         private string _archivePath;
         private bool _fileOrDirectory; // 0 - file 1 - dir
 
+
         #region Get/Set
 
         public string ArchivePath { get { return _archivePath; }}
@@ -50,9 +51,26 @@ namespace Otik_MyFileExtention
             string[] files = Directory.GetFiles(Directory.GetCurrentDirectory(), filePath + @"\*");
 
 
+            #region LocalFunction
+            void FileForeach()
+            {
+                foreach (string fil in files)
+                {
+                    ArchiveFile(fil);
+                    //EndWriteSegment();
+                }
+            }
+
+            void DirForeach()
+            {
+                foreach (string dir in dirs)
+                {
+                    ArchiverRecursion(dir.Replace(Directory.GetCurrentDirectory() + @"\", ""));
+                }
+            }
+            #endregion
+
             ArchiveFolder(filePath);
-
-
             switch (dirs.Length > 0, files.Length > 0)
             {
                 case (true, true):
@@ -89,26 +107,7 @@ namespace Otik_MyFileExtention
                     }               
             }
 
-            //EndWriteSegment();
-
-            #region LocalFunction
-            void FileForeach()
-            {
-                foreach (string fil in files)
-                {               
-                    ArchiveFile(fil);
-                    //EndWriteSegment();
-                }
-            }
-
-            void DirForeach()
-            {
-                foreach (string dir in dirs)
-                {
-                    ArchiverRecursion(dir.Replace(Directory.GetCurrentDirectory() + @"\", ""));
-                }
-            }
-            #endregion
+            //EndWriteSegment();            
         }
 
         private void ArchiveFile(string filePath)
