@@ -39,7 +39,7 @@ namespace Otik_MyFileExtention
                     h.Signature[i - byt] = file[i];
                 byt += 5;
 
-                h.FileOrDirectory = Convert.ToBoolean(file[byt]);
+                h.FileOrDirectory = BitConverter.ToBoolean(file, byt);
                 byt += 2;
 
                 int count = 0;
@@ -48,28 +48,22 @@ namespace Otik_MyFileExtention
                 h.Name = Encoding.UTF8.GetString(file, byt, count);
                 byt += count + 1;
 
-                count = 0;
-                while (file[byt + count] != 10)
-                    count++;
-                h.Version = Convert.ToInt32(Encoding.UTF8.GetString(file, byt, count));
-                byt += count + 1;
+                
 
-                count = 0;
-                while (file[byt + count] != 10)
-                    count++;
-                h.Arhive = Convert.ToInt32(Encoding.UTF8.GetString(file, byt, count));
-                byt += count + 1;
+                h.Version = BitConverter.ToInt32(file, byt);
+                byt += 4 + 1;
 
-                count = 0;
-                while (file[byt + count] != 10)
-                    count++;
-                h.Protect = Convert.ToInt32(Encoding.UTF8.GetString(file, byt, count));
-                byt += count + 1;
+                
+                h.Arhive = BitConverter.ToInt32(file, byt);
+                byt += 4 + 1;
 
-                count = 0;
-                while (file[byt + count] != 10)
-                    count++;
-                h.StartInfoByte = Convert.ToInt32(Encoding.UTF8.GetString(file, byt, count));
+                
+                h.Protect = BitConverter.ToInt32(file, byt);
+                byt += 4 + 1;
+
+
+                h.StartInfoByte = BitConverter.ToInt32(file, byt);
+
 
                 Console.WriteLine("Sygnature " + Encoding.UTF8.GetString(h.Signature));
                 Console.WriteLine("bool " + h.FileOrDirectory);
@@ -79,11 +73,8 @@ namespace Otik_MyFileExtention
                 Console.WriteLine("Protect " + h.Protect);
                 Console.WriteLine("StartInfoByte " + h.StartInfoByte);
                 Console.WriteLine("INFO ");
-                while (Encoding.UTF8.GetString(file, byt, 1) != "{")
-                {
-                    byt++;
-                }
-                byt += 2;
+
+                byt = h.StartInfoByte;
                 count = 0;
                 while (file[byt + count] != 10)
                     count++;

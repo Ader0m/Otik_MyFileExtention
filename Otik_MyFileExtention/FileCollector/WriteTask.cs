@@ -20,11 +20,11 @@ namespace Otik_MyFileExtention
             //Записываем содержимое
             while (i < (content.Length / 1024) + 1)
             {           
-                buffer = content.Skip(bytesRead - 2).Take(content.Length % 1024).ToArray();
+                buffer = content.Skip(bytesRead).Take(content.Length % 1024).ToArray();
                 //Console.WriteLine("Buffer lenght {0}. StartByte {1}. bytesRead {2}.", buffer.Length, FileCollector.Header.StartInfoByte, bytesRead);
                 fileStreamInput.Position = bytesRead + startOffset;
                 fileStreamInput.Write(buffer, 0, buffer.Length);
-                bytesRead += 1024;
+                bytesRead += buffer.Length;
                 i++;
             }
 

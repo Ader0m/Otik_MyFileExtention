@@ -13,7 +13,9 @@ namespace Otik_MyFileExtention
             FileStream fileStreamInput = File.OpenRead(FileCollector.FilePath);
             content = new byte[fileStreamInput.Length];
 
-            fileStreamInput.Read(content);           
+            fileStreamInput.Read(content);
+
+            fileStreamInput.Close();
 
             return content;
         }

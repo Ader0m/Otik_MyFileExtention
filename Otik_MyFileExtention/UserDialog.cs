@@ -91,7 +91,9 @@
                             }
                         case 3:
                             {
+                                Console.WriteLine("1");
                                 Decoder.Instence.Start();
+                                Console.WriteLine("2");
                                 break;
                             }
                         case 0:
@@ -109,6 +111,7 @@
             catch (FormatException e)
             {
                 Console.WriteLine("Введите !номер! команды\n");
+                Console.WriteLine(e);
                 ListenUserInput();
             }
         }
@@ -144,7 +147,7 @@
             {
                 case (true, true):
                     {
-                        Console.WriteLine("Error: В целевом каталоге обнаружен и файл и каталог. Исправьте это.");
+                        Console.WriteLine("Error: В целевом каталоге обнаружен и файл и каталог. Исправьте это.\n");
 
 
                         return false;
@@ -158,14 +161,14 @@
                     }
                 case (true, false):
                     {
-                        Console.WriteLine("Обнаружен каталог.");
+                        Console.WriteLine("Обнаружен каталог.\n");
                         FileOrDirectory = true;
 
                         return true;
                     }
                 case (false, true):
                     {
-                        Console.WriteLine("Обнаружен файл.");
+                        Console.WriteLine("Обнаружен файл.\n");
                         FileOrDirectory = false;
 
 

@@ -8,7 +8,7 @@ namespace Otik_MyFileExtention
 {
     internal static class Storage
     {       
-        private static string _nameFile = "bla.iva";
+        private static string _nameFile = "bls.iva";
         private static readonly byte[] _signature = { 0x69, 0x76, 0x61, 0x65 };
         private static readonly int _version = 1;
 
@@ -53,7 +53,7 @@ namespace Otik_MyFileExtention
                                 4 + // byte mass
                                 1 + // bool
                                 3 + // {
-                                12; // \n
+                                8; // \n
             }
 
             public bool CheckSignature()
@@ -72,7 +72,7 @@ namespace Otik_MyFileExtention
             public byte[] ToWrite()
             {
                 string startHeader = "\n{\n";
-                string endHeader = "\n" + "}\n" + "{\n";
+                string endHeader = "}\n" + "{\n";
                 int offset;
                 byte[] data = new byte[StartInfoByte];
                 byte[] nameByteMass;
@@ -84,14 +84,26 @@ namespace Otik_MyFileExtention
                 data[3] = Signature[3];
                 offset = 4;
 
-                AddBool(FileOrDirectory);
+                AddString("\n");
+                AddBool(FileOrDirectory); AddString("\n");
                 AddString(Name);
-                AddInt(Version);
-                AddInt(Arhive);
-                AddInt(Protect);
+
+                StartInfoByte = StartInfoByte - ((Name.Length * sizeof(char)) - nameByteMass.Length);
+                byte[] fixData = new byte[StartInfoByte];
+                for (int i = 0; i < fixData.Length; i++)
+                {
+                    fixData[i] = data[i];
+                }
+                data = fixData;
+
+                AddString("\n");
+                AddInt(Version); AddString("\n");
+                AddInt(Arhive); AddString("\n");
+                AddInt(Protect); AddString("\n");
+                AddInt(StartInfoByte); AddString("\n");
                 AddString(endHeader);
 
-                data = Encoding.UTF8.GetBytes(startHeader).Concat(data).ToArray();
+                data = Encoding.UTF8.GetBytes(startHeader).Concat(data).ToArray();                
 
                 return data;
 
@@ -110,26 +122,34 @@ namespace Otik_MyFileExtention
                     offset += sizeof(bool);
                 }
 
-                void AddString(string target)
+                void AddN(string target)
                 {
                     nameByteMass = Encoding.UTF8.GetBytes(target);
                     nameByteMass.CopyTo(data, offset);
                     offset += nameByteMass.Length;
+                }
+
+                int AddString(string target)
+                {
+                    nameByteMass = Encoding.UTF8.GetBytes(target);
+                    nameByteMass.CopyTo(data, offset);
+                    offset += nameByteMass.Length;
+
+                    return nameByteMass.Length;
                 }
                 #endregion
             }
 
             public override string ToString()
             {
-                return "\n{\n{\n" + // начало в HeaderTask
-                    Signature[0].ToString() + " " + Signature[1].ToString() + " " + Signature[2].ToString() + " " + Signature[3].ToString() + "\n" + // 9
-                    FileOrDirectory.ToString() + "\n" + // 1 + 1
-                    Name + "\n" + // 7 + 1
-                    Version + "\n" + // 4 + 1
-                    Arhive + "\n" + // 4 + 1
-                    Protect + "\n" + // 4 + 1
-                    StartInfoByte.ToString() + "\n" + "}\n" + "{\n"; // 4 + 1 + 1 + 1
-                // 46
+                return "\n{\n{\n" +
+                    Signature[0].ToString() + " " + Signature[1].ToString() + " " + Signature[2].ToString() + " " + Signature[3].ToString() + "\n" +
+                    FileOrDirectory.ToString() + "\n" +
+                    Name + "\n" +
+                    Version + "\n" +
+                    Arhive + "\n" +
+                    Protect + "\n" +
+                    StartInfoByte.ToString() + "\n" + "}\n" + "{\n";
             }
         }
     }
