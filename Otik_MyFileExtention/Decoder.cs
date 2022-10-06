@@ -31,6 +31,7 @@ namespace Otik_MyFileExtention
             FileStream fileStreamInput = File.OpenRead(Storage.NameFile);
             file = new byte[fileStreamInput.Length];
             fileStreamInput.Read(file);
+            fileStreamInput.Close();
             for (int byt = 0; byt < file.Length; byt++)
             {
                 byt += 3;
@@ -87,11 +88,18 @@ namespace Otik_MyFileExtention
                 while (file[byt + count] != 10)
                     count++;
                 Console.WriteLine(Encoding.UTF8.GetString(file, byt, count));
-                byt += count + 1;
+                ReadOnlySpan<byte> info = new ReadOnlySpan<byte>(file, byt, count);
                 if (h.FileOrDirectory)
                     Directory.CreateDirectory(Directory.GetCurrentDirectory() + @"\" + h.Name);
                 else
-                    File.Create(Directory.GetCurrentDirectory() + @"\" + h.Name);
+                {
+                    fileStreamInput = File.Create(Directory.GetCurrentDirectory() + @"\" + h.Name);
+                    fileStreamInput.Close();
+                    fileStreamInput = File.OpenWrite(Directory.GetCurrentDirectory() + @"\" + h.Name);
+                    fileStreamInput.Write(info);
+                    fileStreamInput.Close();
+                }
+                byt += count + 1;
             }
         }
     }
