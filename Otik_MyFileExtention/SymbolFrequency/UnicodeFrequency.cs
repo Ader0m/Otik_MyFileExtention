@@ -10,7 +10,19 @@ namespace Otik_MyFileExtention.SymbolFrequency
     {
         public void Task()
         {
-            throw new NotImplementedException();
+            char[] chars;
+            chars = Encoding.UTF8.GetChars(Encoding.UTF8.GetBytes(SymbolDialog.FileInfo));
+
+            foreach (char ch in chars)
+            {
+                int count;
+
+                if (SymbolDialog.FrequencyDict.TryGetValue(ch, out count))
+                {
+                    SymbolDialog.FrequencyDict[ch] = 1;
+                }
+                SymbolDialog.FrequencyDict[ch] = count++;
+            }
         }
     }
 }
