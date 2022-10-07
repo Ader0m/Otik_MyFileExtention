@@ -1,4 +1,7 @@
-﻿namespace Otik_MyFileExtention
+﻿using Otik_MyFileExtention.SymbolFrequency;
+
+
+namespace Otik_MyFileExtention
 {
     static class UserDialog
     {
@@ -34,34 +37,40 @@
                     await Task.Delay(50);
             }
             await Task.Delay(650);
-            Console.SetWindowSize(46, 20);
+            Console.SetWindowSize(50, 20);
 
             Encode encode = new Encode();
             Decoder decoder = new Decoder();
-            StartDialog();
+            StartMainDialog();
         }
 
-        static public void StartDialog()
+        static public void StartMainDialog()
+        {
+            LoadMainMenu();
+            ListenMainUserInput();
+        }
+
+        static public void StartSecondDialog()
+        {
+            LoadSecondnMenu();
+            ListenSecondUserInput();
+        }
+
+        #region Main
+        static private void LoadMainMenu()
         {
             Console.Clear();
-            LoadMenu();
-            ListenUserInput();
-
-
-        }
-
-        static private void LoadMenu()
-        {
-            Console.WriteLine("*--------------------Menu--------------------*");
+            Console.WriteLine("*----------------------Menu----------------------*");
             Console.WriteLine("\tАктивный {0}: {1}", FileOrDirectory ? "Каталог" : "Файл", Storage.NameFile);
             Console.WriteLine();
             Console.WriteLine("\t1. Введите имя файла");
             Console.WriteLine("\t2. Архивировать");
             Console.WriteLine("\t3. Разархивировать");
+            Console.WriteLine("\t4. Другие команды");
             Console.WriteLine("\t0. Выход");
         }
 
-        static private void ListenUserInput()
+        static private void ListenMainUserInput()
         {
             try
             {
@@ -73,7 +82,7 @@
                         case 1:
                             {
                                 CorrectFileName();
-                                StartDialog();
+                                StartMainDialog();
                                 break;
                             }
                         case 2:
@@ -102,6 +111,11 @@
                                     }                                
                                 break;
                             }
+                        case 4:
+                            {
+                                StartSecondDialog();
+                                break;
+                            }
                         case 0:
                             {
                                 return;
@@ -118,9 +132,73 @@
             {
                 Console.WriteLine("Введите !номер! команды\n");
                 Console.WriteLine(e);
-                ListenUserInput();
+                ListenMainUserInput();
             }
         }
+        #endregion
+
+        #region Second
+        static private void LoadSecondnMenu()
+        {
+            Console.Clear();
+            Console.WriteLine("*---------------------ExMenu---------------------*");
+            Console.WriteLine("\tАктивный {0}: {1}", FileOrDirectory ? "Каталог" : "Файл", Storage.NameFile);
+            Console.WriteLine();
+            Console.WriteLine("\t1. Введите имя файла");
+            Console.WriteLine("\t2. Определить частоту байтов");
+            Console.WriteLine("\t3. Определить частоту символов Unicode");
+            Console.WriteLine("\t0. Выход");
+        }
+
+        static private void ListenSecondUserInput()
+        {
+            try
+            {
+                while (true)
+                {
+                    int input = Convert.ToInt32(Console.ReadLine());
+                    switch (input)
+                    {
+                        case 1:
+                            {
+                                CorrectFileName();
+                                StartSecondDialog();
+                                break;
+                            }
+                        case 2:
+                            {
+                                SymbolDialog symbolDialog = new SymbolDialog(new ByteFrequency());
+                                symbolDialog.SymbolDialogStart();
+                                break;
+                            }
+                        case 3:
+                            {
+                                SymbolDialog symbolDialog = new SymbolDialog(new UnicodeFrequency());
+                                symbolDialog.SymbolDialogStart();
+                                break;
+                            }
+                        case 0:
+                            {
+                                LoadMainMenu();
+                                return;
+                            }
+                        default:
+                            {
+                                Console.WriteLine("Error: Номер команды введен не корректно");
+                                break;
+                            }
+                    }
+                }
+            }
+            catch (FormatException e)
+            {
+                Console.WriteLine("Введите !номер! команды\n");
+                Console.WriteLine(e);
+                ListenMainUserInput();
+            }
+        }
+
+        #endregion
 
         private static void CorrectFileName()
         {
