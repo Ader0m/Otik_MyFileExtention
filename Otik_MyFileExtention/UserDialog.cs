@@ -26,7 +26,6 @@ namespace Otik_MyFileExtention
 
         public static bool FileOrDirectory = false; // 0 - file 1 - dir
 
-
         static async Task Main(string[] args)
         {
             Console.SetWindowSize(75, 20);
@@ -167,14 +166,19 @@ namespace Otik_MyFileExtention
                             }
                         case 2:
                             {
-                                SymbolDialog symbolDialog = new SymbolDialog(new ByteFrequency());
+                                FileStream fileStream = File.OpenRead(Storage.NameFile);
+                                byte[] info = new byte[fileStream.Length];
+                                fileStream.Read(info);
+
+
+                                SymbolDialog symbolDialog = new SymbolDialog(new ByteFrequency(), info);
                                 symbolDialog.SymbolDialogStart();
                                 break;
                             }
                         case 3:
                             {
-                                SymbolDialog symbolDialog = new SymbolDialog(new UnicodeFrequency());
-                                symbolDialog.SymbolDialogStart();
+                                //SymbolDialog symbolDialog = new SymbolDialog(new UnicodeFrequency());
+                                //symbolDialog.SymbolDialogStart();
                                 break;
                             }
                         case 0:
