@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
-using static Otik_MyFileExtention.ContentTask;
+using Otik_MyFileExtention.FileCollector;
 
 namespace Otik_MyFileExtention
 {

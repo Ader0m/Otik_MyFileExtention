@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Otik_MyFileExtention.FileCollector;
 
 namespace Otik_MyFileExtention
 {
@@ -114,13 +115,13 @@ namespace Otik_MyFileExtention
         {
             try
             {                
-                FileCollector fileCollector = new FileCollector(0);
+                FileCollectorController fileCollector = new FileCollectorController(0);
 
-                FileCollector.FilePath = filePath;
-                FileCollector.Header.Name = filePath.Replace(Directory.GetCurrentDirectory() + @"\", "");
-                FileCollector.Header.FileOrDirectory = false;
-                FileCollector.Header.Signature = Storage.Signature;                
-                FileCollector.Header.SolveStartInfoByte();
+                FileCollectorController.FilePath = filePath;
+                FileCollectorController.Header.Name = filePath.Replace(Directory.GetCurrentDirectory() + @"\", "");
+                FileCollectorController.Header.FileOrDirectory = false;
+                FileCollectorController.Header.Signature = Storage.Signature;                
+                FileCollectorController.Header.SolveStartInfoByte();
 
                 fileCollector.Task(new byte[1]);
 
@@ -136,13 +137,13 @@ namespace Otik_MyFileExtention
         {
             try
             {
-                FileCollector fileCollector = new FileCollector(1);
+                FileCollectorController fileCollector = new FileCollectorController(1);
 
-                FileCollector.FilePath = filePath;
-                FileCollector.Header.Name = filePath.Replace(Directory.GetCurrentDirectory(), "");
-                FileCollector.Header.FileOrDirectory = true;
-                FileCollector.Header.Signature = Storage.Signature;
-                FileCollector.Header.SolveStartInfoByte();
+                FileCollectorController.FilePath = filePath;
+                FileCollectorController.Header.Name = filePath.Replace(Directory.GetCurrentDirectory(), "");
+                FileCollectorController.Header.FileOrDirectory = true;
+                FileCollectorController.Header.Signature = Storage.Signature;
+                FileCollectorController.Header.SolveStartInfoByte();
 
                 fileCollector.Task(new byte[1]);
 

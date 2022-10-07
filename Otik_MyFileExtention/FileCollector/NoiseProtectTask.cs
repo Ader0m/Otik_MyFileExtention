@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Otik_MyFileExtention
+namespace Otik_MyFileExtention.FileCollector
 {
     internal class NoiseProtectTask : IFileTask
     {

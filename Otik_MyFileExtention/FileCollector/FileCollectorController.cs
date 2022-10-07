@@ -4,16 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Otik_MyFileExtention
+namespace Otik_MyFileExtention.FileCollector
 {
-    internal class FileCollector : IFileTask
+    internal class FileCollectorController : IFileTask
     {
         private static List<IFileTask> _tasks;
         public static Storage.IvaExtentionHeader Header;
         public static string FilePath;
 
         //0 - file; 1 - folder
-        public FileCollector(int mod)
+        public FileCollectorController(int mod)
         {
             _tasks = new List<IFileTask>();
             Header = new Storage.IvaExtentionHeader();
