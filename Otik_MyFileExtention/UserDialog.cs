@@ -165,12 +165,7 @@ namespace Otik_MyFileExtention
                                 break;
                             }
                         case 2:
-                            {
-                                FileStream fileStream = File.OpenRead(Storage.NameFile);
-                                byte[] info = new byte[fileStream.Length];
-                                fileStream.Read(info);
-
-
+                            {                               
                                 SymbolDialog symbolDialog = new SymbolDialog(new ByteFrequency(), info);
                                 symbolDialog.SymbolDialogStart();
                                 break;
