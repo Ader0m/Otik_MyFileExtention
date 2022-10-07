@@ -8,51 +8,79 @@ namespace Otik_MyFileExtention.SymbolFrequency
 {
     internal class SymbolDialog
     {
-        public static Dictionary<char, int> FrequencyDict;
-        public static string FileInfo;
-        private ISymbolTask _task;
+        private FriquencyController _controller;
 
-
-        public SymbolDialog(ISymbolTask task, string fileInfo)
+        public SymbolDialog(ISymbolTask task)
         {
-            _task = task;
-            FileInfo = fileInfo;
-            FrequencyDict = new Dictionary<char, int>();
-
-            _task.Task();
+            _controller = new FriquencyController(task);
         }
 
-        public void SymbolDialogStart()
+        public void StartSymbolDialog()
         {
-            SymbolDialogMenu();
+            LoadSymbolDialogMenu();
+            ListenSymbolDialogUserInput();
         }
 
-        private void SymbolDialogMenu()
+        private void LoadSymbolDialogMenu()
         {
             Console.Clear();
             Console.WriteLine("*-------------------SymbolMenu-------------------*");
-            Console.WriteLine("\tАктивный файл", Storage.NameFile);
+            Console.WriteLine("\tАктивный файл {0}", Storage.NameFile);
             Console.WriteLine();
             Console.WriteLine("\t1. Введите имя файла");
             Console.WriteLine("\t2. Сортировать по алфавиту");
             Console.WriteLine("\t3. Сортировать частоты по убыванию");
             Console.WriteLine("\t0. Выход");
         }
-        public void sortKey()
+
+        private void ListenSymbolDialogUserInput()
         {
-            FrequencyDict = FrequencyDict.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
-            foreach (var element in FrequencyDict)
+            while (true)
             {
-                Console.WriteLine($"key: {element.Key}  value: {element.Value}");
+                try
+                {
+                    while (true)
+                    {
+                        int input = Convert.ToInt32(Console.ReadLine());
+                        switch (input)
+                        {
+                            case 1:
+                                {
+                                    UserDialog.CorrectFileName();                                   
+                                    _controller = new FriquencyController(new ByteFrequency());
+                                    StartSymbolDialog();
+                                    break;
+                                }
+                            case 2:
+                                {
+                                    _controller.sortKey();
+                                    break;
+                                }
+                            case 3:
+                                {
+                                    _controller.sortValue();
+                                    break;
+                                }
+                            case 0:
+                                {
+                                    UserDialog.LoadSecondMenu();
+                                    return;
+                                }
+                            default:
+                                {
+                                    Console.WriteLine("Error: Номер команды введен не корректно");
+                                    break;
+                                }
+                        }
+                    }
+                }
+                catch (FormatException e)
+                {
+                    Console.WriteLine("Введите !номер! команды\n");
+                    Console.WriteLine(e);
+                    ListenSymbolDialogUserInput();
+                }
             }
-        }
-        public void sortValue()
-        {
-            FrequencyDict = FrequencyDict.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
-            foreach (var element in FrequencyDict)
-            {
-                Console.WriteLine($"key: {element.Key}  value: {element.Value}");
-            }
-        }
+        }     
     }
 }

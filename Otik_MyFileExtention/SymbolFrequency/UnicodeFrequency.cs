@@ -11,17 +11,21 @@ namespace Otik_MyFileExtention.SymbolFrequency
         public void Task()
         {
             char[] chars;
-            chars = Encoding.UTF8.GetChars(Encoding.UTF8.GetBytes(SymbolDialog.FileInfo));
+            chars = Encoding.UTF8.GetChars(Encoding.UTF8.GetBytes(FriquencyController.FileInfo));
 
             foreach (char ch in chars)
             {
                 int count;
 
-                if (SymbolDialog.FrequencyDict.TryGetValue(ch, out count))
+                if (FriquencyController.FrequencyDict.TryGetValue(ch, out count))
                 {
-                    SymbolDialog.FrequencyDict[ch] = 1;
+                    FriquencyController.FrequencyDict[ch] = ++count;                    
                 }
-                SymbolDialog.FrequencyDict[ch] = count++;
+                else
+                {
+                    FriquencyController.FrequencyDict[ch] = 1;
+                }
+                
             }
         }
     }

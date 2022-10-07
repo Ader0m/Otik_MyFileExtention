@@ -10,15 +10,18 @@ namespace Otik_MyFileExtention.SymbolFrequency
     {
         public void Task()
         {
-            foreach (char b in SymbolDialog.FileInfo)
+            foreach (char b in FriquencyController.FileInfo)
             {
                 int count;
-
-                if(SymbolDialog.FrequencyDict.TryGetValue(b, out count))
-                {
-                    SymbolDialog.FrequencyDict[b] = 1;
+                
+                if (FriquencyController.FrequencyDict.TryGetValue(b, out count))
+                { 
+                    FriquencyController.FrequencyDict[b] = ++count;                   
                 }
-                SymbolDialog.FrequencyDict[b] = count++;
+                else
+                {
+                    FriquencyController.FrequencyDict[b] = 1;
+                }
             }
         }
     }

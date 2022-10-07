@@ -51,7 +51,7 @@ namespace Otik_MyFileExtention
 
         static public void StartSecondDialog()
         {
-            LoadSecondnMenu();
+            LoadSecondMenu();
             ListenSecondUserInput();
         }
 
@@ -137,7 +137,7 @@ namespace Otik_MyFileExtention
         #endregion
 
         #region Second
-        static private void LoadSecondnMenu()
+        static public void LoadSecondMenu()
         {
             Console.Clear();
             Console.WriteLine("*---------------------ExMenu---------------------*");
@@ -165,15 +165,30 @@ namespace Otik_MyFileExtention
                                 break;
                             }
                         case 2:
-                            {                               
-                                SymbolDialog symbolDialog = new SymbolDialog(new ByteFrequency(), info);
-                                symbolDialog.SymbolDialogStart();
+                            {                         
+                                if (!Storage.NameFile.Equals("Введите имя"))
+                                {
+                                    SymbolDialog symbolDialog = new SymbolDialog(new ByteFrequency());
+                                    symbolDialog.StartSymbolDialog();
+
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Error: Введите имя");
+                                }
                                 break;
                             }
                         case 3:
                             {
-                                //SymbolDialog symbolDialog = new SymbolDialog(new UnicodeFrequency());
-                                //symbolDialog.SymbolDialogStart();
+                                if (!Storage.NameFile.Equals("Введите имя"))
+                                {
+                                    SymbolDialog symbolDialog = new SymbolDialog(new UnicodeFrequency());
+                                    symbolDialog.StartSymbolDialog();
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Error: Введите имя");
+                                }
                                 break;
                             }
                         case 0:
@@ -193,13 +208,13 @@ namespace Otik_MyFileExtention
             {
                 Console.WriteLine("Введите !номер! команды\n");
                 Console.WriteLine(e);
-                ListenMainUserInput();
+                ListenSecondUserInput();
             }
         }
 
         #endregion
 
-        private static void CorrectFileName()
+        public static void CorrectFileName()
         {
             while (true)
             {
