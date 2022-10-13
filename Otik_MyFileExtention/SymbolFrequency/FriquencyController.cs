@@ -12,48 +12,49 @@ namespace Otik_MyFileExtention.SymbolFrequency
         public static string FileInfo;
         private ISymbolTask _task;
 
-        public FriquencyController(ISymbolTask task)
+        public FriquencyController(ISymbolTask task, string? FilePath)
         {
             _task = task;
-            FileInfo = File.ReadAllText(Storage.NameFile);
-            Console.WriteLine(FileInfo);
+            if (FilePath == null)
+            {
+                FileInfo = File.ReadAllText(Storage.NameFile);
+            }
+            else
+            {
+                FileInfo = File.ReadAllText(FilePath);
+            }
             FrequencyDict = new Dictionary<char, int>();
 
             _task.Task();
         }
 
-        public void sortKey()
+        public Dictionary<char, int> SortKey()
         {
-            FriquencyController.FrequencyDict = FriquencyController.FrequencyDict.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
-            if (_task is ByteFrequency)
-            {
-                foreach (var element in FriquencyController.FrequencyDict)
-                {
-                    Console.WriteLine($"key: {Convert.ToInt32(element.Key)}  value: {element.Value}");
-                }
-            }
-            else
-            {
-                foreach (var element in FriquencyController.FrequencyDict)
-                {
-                    Console.WriteLine($"key: {element.Key}  value: {element.Value}");
-                }
-            }
+            FrequencyDict = FrequencyDict.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
+
+            return FrequencyDict;
         }
 
-        public void sortValue()
+        public Dictionary<char, int> SortValue()
+        {
+            FrequencyDict = FrequencyDict.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+
+            return FrequencyDict;
+        }
+
+        public void Print()
         {
             if (_task is ByteFrequency)
             {
-                FriquencyController.FrequencyDict = FriquencyController.FrequencyDict.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
-                foreach (var element in FriquencyController.FrequencyDict)
+
+                foreach (var element in FrequencyDict)
                 {
                     Console.WriteLine($"key: {Convert.ToInt32(element.Key)}  value: {element.Value}");
                 }
             }
             else
             {
-                foreach (var element in FriquencyController.FrequencyDict)
+                foreach (var element in FrequencyDict)
                 {
                     Console.WriteLine($"key: {element.Key}  value: {element.Value}");
                 }

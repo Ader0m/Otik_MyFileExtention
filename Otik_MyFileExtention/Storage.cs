@@ -24,14 +24,14 @@ namespace Otik_MyFileExtention
 
         public struct IvaExtentionHeader
         {
+            public byte[] Signature;
+            public bool FileOrDirectory; // 0 - file 1 - dir
             public string Name;
             public int Version;
             public int Arhive;
             public int Protect;
             public int StartInfoByte;
-            public byte[] Signature;
-            public bool FileOrDirectory; // 0 - file 1 - dir
-
+            
             public IvaExtentionHeader()
             {
                 Name = "";

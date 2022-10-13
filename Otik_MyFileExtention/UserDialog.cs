@@ -3,6 +3,7 @@
 
 namespace Otik_MyFileExtention
 {
+    //мы 6 группа
     static class UserDialog
     {
         #region Image
@@ -35,7 +36,7 @@ namespace Otik_MyFileExtention
                 if (i % 77 == 0)
                     await Task.Delay(50);
             }
-            await Task.Delay(650);
+            await Task.Delay(200);
             Console.SetWindowSize(50, 20);
 
             Encode encode = new Encode();

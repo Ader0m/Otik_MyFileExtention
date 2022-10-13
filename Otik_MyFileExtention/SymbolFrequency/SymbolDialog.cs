@@ -9,10 +9,13 @@ namespace Otik_MyFileExtention.SymbolFrequency
     internal class SymbolDialog
     {
         private FriquencyController _controller;
+        private ISymbolTask _task;
+
 
         public SymbolDialog(ISymbolTask task)
         {
-            _controller = new FriquencyController(task);
+            _task = task;
+            _controller = new FriquencyController(task, null);
         }
 
         public void StartSymbolDialog()
@@ -46,19 +49,21 @@ namespace Otik_MyFileExtention.SymbolFrequency
                         {
                             case 1:
                                 {
-                                    UserDialog.CorrectFileName();                                   
-                                    _controller = new FriquencyController(new ByteFrequency());
+                                    UserDialog.CorrectFileName();
+                                    _controller = new FriquencyController(_task, null);
                                     StartSymbolDialog();
                                     break;
                                 }
                             case 2:
                                 {
-                                    _controller.sortKey();
+                                    _controller.SortKey();
+                                    _controller.Print();
                                     break;
                                 }
                             case 3:
                                 {
-                                    _controller.sortValue();
+                                    _controller.SortValue();
+                                    _controller.Print();
                                     break;
                                 }
                             case 0:
@@ -77,8 +82,6 @@ namespace Otik_MyFileExtention.SymbolFrequency
                 catch (FormatException e)
                 {
                     Console.WriteLine("Введите !номер! команды\n");
-                    Console.WriteLine(e);
-                    ListenSymbolDialogUserInput();
                 }
             }
         }     
