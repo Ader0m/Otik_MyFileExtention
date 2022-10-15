@@ -10,7 +10,7 @@ namespace Otik_MyFileExtention
     {       
         private static string _nameFile = "Введите имя";
         private static readonly byte[] _signature = { 0x69, 0x76, 0x61, 0x65 };
-        private static readonly int _version = 1;
+        private static readonly int _version = 2;
 
         #region Get/Set
 

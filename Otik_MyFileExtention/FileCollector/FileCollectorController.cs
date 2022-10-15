@@ -33,11 +33,8 @@ namespace Otik_MyFileExtention.FileCollector
                         _tasks.Add(new HeaderTask());                       
                         _tasks.Add(new WriteTask());
                         break;
-                    }
-            
-            }
-
-            
+                    }         
+            }     
         }
 
         public byte[] Task(byte[] none)
@@ -51,6 +48,8 @@ namespace Otik_MyFileExtention.FileCollector
             }
 
             Console.WriteLine("Конец процесса " + FilePath);
+
+
             return content;           
         }
 

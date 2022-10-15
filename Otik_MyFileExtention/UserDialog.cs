@@ -96,6 +96,10 @@ namespace Otik_MyFileExtention
                                     {
                                         Console.WriteLine("Error: Нельзя архивировать архив .iva");
                                     }
+                                else
+                                {
+                                    Console.WriteLine("Error: Введите имя");
+                                }
                                 break;
                             }
                         case 3:
@@ -146,7 +150,7 @@ namespace Otik_MyFileExtention
             Console.WriteLine();
             Console.WriteLine("\t1. Введите имя файла");
             Console.WriteLine("\t2. Определить частоту байтов");
-            Console.WriteLine("\t3. Определить частоту символов Unicode");
+            Console.WriteLine("\t3. Определить частоту символов UTF8");
             Console.WriteLine("\t0. Выход");
         }
 
@@ -183,7 +187,7 @@ namespace Otik_MyFileExtention
                             {
                                 if (!Storage.NameFile.Equals("Введите имя"))
                                 {
-                                    SymbolDialog symbolDialog = new SymbolDialog(new UnicodeFrequency());
+                                    SymbolDialog symbolDialog = new SymbolDialog(new UTF8Frequency());
                                     symbolDialog.StartSymbolDialog();
                                 }
                                 else

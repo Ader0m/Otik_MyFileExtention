@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Otik_MyFileExtention.SymbolFrequency
 {
-    internal class UnicodeFrequency : ISymbolTask
+    internal class UTF8Frequency : ISymbolTask
     {
         public void Task()
         {
             char[] chars;
-            chars = Encoding.Unicode.GetChars(Encoding.UTF8.GetBytes(FriquencyController.FileInfo));
+            chars = Encoding.UTF8.GetChars(Encoding.UTF8.GetBytes(FriquencyController.FileInfo));
 
             foreach (char ch in chars)
             {
