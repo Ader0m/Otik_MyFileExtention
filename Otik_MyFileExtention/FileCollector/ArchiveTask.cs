@@ -10,6 +10,11 @@ namespace Otik_MyFileExtention.FileCollector
     { 
         public byte[] Task(byte[] content)
         {
+            if (content.Length < 1)
+            {
+                return content;
+            }
+
             switch (FileCollectorController.Header.Arhive)
             {
                 case 1:

@@ -36,7 +36,7 @@ namespace Otik_MyFileExtention.Haffman
         {
             CreateHuffmanCode(CreateHuffmanTree(FriquencyController.FrequencyDict));
 
-            return Compress(content);
+            return Compress(Encoding.UTF8.GetChars(content));
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Otik_MyFileExtention.Haffman
             return CreateHuffmanCode(CreateHuffmanTree(frequencyDict));
         }
 
-        private byte[] Compress(byte[] content)
+        private byte[] Compress(char[] content)
         {
             List<byte> data = new List<byte>();
             byte sum = 0;

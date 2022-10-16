@@ -20,12 +20,12 @@ namespace Otik_MyFileExtention.FileCollector
 
             switch (mod) {
                 case 0:
-                    {
-                        _tasks.Add(new HeaderTask()); //0
+                    {                     
                         _tasks.Add(new ContentTask()); //1
                         _tasks.Add(new ArchiveTask()); //2
                         _tasks.Add(new NoiseProtectTask()); //3
-                        _tasks.Add(new WriteTask()); //4
+                        _tasks.Add(new HeaderTask()); //4
+                        _tasks.Add(new WriteTask()); //5
                         break;
                     }
                 case 1:

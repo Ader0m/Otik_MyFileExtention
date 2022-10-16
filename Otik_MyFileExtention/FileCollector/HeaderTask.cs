@@ -8,19 +8,12 @@ namespace Otik_MyFileExtention.FileCollector
 {
     internal class HeaderTask : IFileTask
     {
-        public byte[] Task(byte[] none)
+        public byte[] Task(byte[] content)
         {
-            FileStream fs = File.OpenWrite(Encode.Instence.ArchivePath);
             byte[] toWrite = FileCollectorController.Header.ToWrite();
 
 
-            fs.Position = fs.Length;
-            fs.Write(toWrite, 0, toWrite.Length);
-
-            fs.Close();
-
-
-            return none;
+            return toWrite.Concat(content).ToArray();
         }
     }
 }

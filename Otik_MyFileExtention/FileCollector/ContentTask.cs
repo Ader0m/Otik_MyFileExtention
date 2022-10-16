@@ -10,12 +10,20 @@ namespace Otik_MyFileExtention.FileCollector
     {
         public byte[] Task(byte[] content)
         {
-            FileStream fileStreamInput = File.OpenRead(FileCollectorController.FilePath);
-            content = new byte[fileStreamInput.Length];
+            switch (FileCollectorController.Header.Arhive)
+            {
+                case 1:
+                    {
+                        FileStream fileStreamInput = File.OpenRead(FileCollectorController.FilePath);
+                        content = new byte[fileStreamInput.Length];
 
-            fileStreamInput.Read(content);
+                        fileStreamInput.Read(content);
 
-            fileStreamInput.Close();
+                        fileStreamInput.Close();
+
+                        break;
+                    }
+            }
 
             return content;
         }

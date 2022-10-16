@@ -11,7 +11,7 @@ namespace Otik_MyFileExtention.FileCollector
         public byte[] Task(byte[] content)
         {
             FileStream fileStreamInput = File.OpenWrite(Encode.Instence.ArchivePath);
-            long startOffset = fileStreamInput.Length;
+            fileStreamInput.Position = fileStreamInput.Length;
             byte[] buffer;
             int bytesRead = 0;
             int i = 0;           
@@ -22,12 +22,9 @@ namespace Otik_MyFileExtention.FileCollector
             {           
                 buffer = content.Skip(bytesRead).Take(content.Length % 1024).ToArray();
 
-                //foreach(byte b in buffer)
-                //{
+                //foreach (byte b in buffer)
                 //    Console.WriteLine(b);
-                //}
-                //Console.WriteLine("Buffer lenght {0}. StartByte {1}. bytesRead {2}.", buffer.Length, FileCollector.Header.StartInfoByte, bytesRead);
-                fileStreamInput.Position = bytesRead + startOffset;
+              
                 fileStreamInput.Write(buffer, 0, buffer.Length);
                 bytesRead += buffer.Length;
                 i++;
