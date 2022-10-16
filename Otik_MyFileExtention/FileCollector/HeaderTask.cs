@@ -12,7 +12,6 @@ namespace Otik_MyFileExtention.FileCollector
         {
             byte[] toWrite = FileCollectorController.Header.ToWrite();
 
-
             return toWrite.Concat(content).ToArray();
         }
     }

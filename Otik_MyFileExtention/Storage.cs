@@ -46,7 +46,7 @@ namespace Otik_MyFileExtention
             /// <summary>
             /// Значение будет равно при считывании началу контента т.к отсчет данных начинаем с 0
             /// </summary>
-            public void SolveStartInfoByte()
+            public int SolveStartInfoByte()
             {
                  StartInfoByte = (Name.Length * sizeof(char)) +
                                 (sizeof(int) * 4) +
@@ -54,6 +54,8 @@ namespace Otik_MyFileExtention
                                 1 + // bool
                                 3 + // {
                                 11; // \n
+
+                return StartInfoByte;
             }
 
             public bool CheckSignature()
@@ -74,8 +76,9 @@ namespace Otik_MyFileExtention
                 string startHeader = "\n{\n";
                 string endHeader = "}\n" + "{\n";
                 int offset;
-                byte[] data = new byte[StartInfoByte];
-                byte[] nameByteMass;
+                int archiveHeaderLength = StartInfoByte - SolveStartInfoByte();
+                byte[] data = new byte[SolveStartInfoByte()];
+                byte[] fixData;
 
                 #region LocalMethod
 
@@ -83,7 +86,6 @@ namespace Otik_MyFileExtention
                 {
                     BitConverter.GetBytes(target).CopyTo(data, offset);
                     offset += sizeof(int);
-
                 }
 
                 void AddBool(bool target)
@@ -92,13 +94,14 @@ namespace Otik_MyFileExtention
                     offset += sizeof(bool);
                 }
 
-                int AddString(string target)
+                void AddString(string target)
                 {
-                    nameByteMass = Encoding.UTF8.GetBytes(target);
-                    nameByteMass.CopyTo(data, offset);
-                    offset += nameByteMass.Length;
+                    byte[] targetByteMass;
 
-                    return nameByteMass.Length;
+
+                    targetByteMass = Encoding.UTF8.GetBytes(target);
+                    targetByteMass.CopyTo(data, offset);
+                    offset += targetByteMass.Length;
                 }
                 #endregion
 
@@ -110,27 +113,22 @@ namespace Otik_MyFileExtention
 
                 AddString("\n");
                 AddBool(FileOrDirectory); AddString("\n");
-                AddString(Name);
+                AddString(Name); AddString("\n");
+                AddInt(Version); AddString("\n");
+                AddInt(Arhive); AddString("\n");
+                AddInt(Protect); AddString("\n");
+                AddInt(offset + 1 + 4 + archiveHeaderLength + endHeader.Length + startHeader.Length); AddString("\n");
+                AddString(endHeader);
 
-                StartInfoByte = StartInfoByte - ((Name.Length * sizeof(char)) - nameByteMass.Length);
-                byte[] fixData = new byte[StartInfoByte - 3];
+                fixData = new byte[offset];
                 for (int i = 0; i < fixData.Length; i++)
                 {
                     fixData[i] = data[i];
                 }
-                data = fixData;
-
-                AddString("\n");
-                AddInt(Version); AddString("\n");
-                AddInt(Arhive); AddString("\n");
-                AddInt(Protect); AddString("\n");
-                AddInt(StartInfoByte); AddString("\n");
-                AddString(endHeader);
-
-                data = Encoding.UTF8.GetBytes(startHeader).Concat(data).ToArray();                
+                fixData = Encoding.ASCII.GetBytes(startHeader).Concat(fixData).ToArray();  
 
 
-                return data;
+                return fixData;
             }
 
             public override string ToString()

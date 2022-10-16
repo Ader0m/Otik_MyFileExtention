@@ -26,12 +26,14 @@ namespace Otik_MyFileExtention.FileCollector
                         _tasks.Add(new NoiseProtectTask()); //3
                         _tasks.Add(new HeaderTask()); //4
                         _tasks.Add(new WriteTask()); //5
+
                         break;
                     }
                 case 1:
                     {
                         _tasks.Add(new HeaderTask());                       
                         _tasks.Add(new WriteTask());
+
                         break;
                     }         
             }     
