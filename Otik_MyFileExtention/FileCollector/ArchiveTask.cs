@@ -23,7 +23,7 @@ namespace Otik_MyFileExtention.FileCollector
                         byte[] data;
                         
 
-                        Haffman.HaffmanLogiс haffman = new Haffman.HaffmanLogiс(FileCollectorController.FilePath);
+                        Haffman.HaffmanLogiс haffman = new Haffman.HaffmanLogiс(content);
                         
                         data = haffman.GetCompressData(content);
                         header = haffman.GetHaffmanHeader();

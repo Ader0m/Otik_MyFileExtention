@@ -121,7 +121,7 @@ namespace Otik_MyFileExtention
                 FileCollectorController.Header.Name = filePath.Replace(Directory.GetCurrentDirectory() + @"\", "");
                 FileCollectorController.Header.FileOrDirectory = false;
                 FileCollectorController.Header.Signature = Storage.Signature;
-                FileCollectorController.Header.Arhive = 0;
+                FileCollectorController.Header.Arhive = 1;
                 FileCollectorController.Header.SolveStartInfoByte();
 
                 fileCollector.Task(new byte[1]);

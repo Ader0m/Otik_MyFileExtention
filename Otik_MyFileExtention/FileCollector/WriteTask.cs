@@ -22,9 +22,9 @@ namespace Otik_MyFileExtention.FileCollector
             {           
                 buffer = content.Skip(bytesRead).Take(content.Length % 1024).ToArray();
 
-                //foreach (byte b in buffer)
-                //    Console.WriteLine(b);
-              
+                foreach (byte b in buffer)
+                    Console.WriteLine(b);
+
                 fileStreamInput.Write(buffer, 0, buffer.Length);
                 bytesRead += buffer.Length;
                 i++;

@@ -10,7 +10,9 @@ namespace Otik_MyFileExtention.SymbolFrequency
     {
         public void Task()
         {
-            foreach (char b in FriquencyController.FileInfo)
+            char[] content = Encoding.UTF8.GetChars(FriquencyController.FileInfo);
+
+            foreach (char b in content)
             {
                 int count;
                 

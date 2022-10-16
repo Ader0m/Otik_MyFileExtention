@@ -20,9 +20,9 @@ namespace Otik_MyFileExtention.Haffman
         /// Для архивации. Бесполезен для разорхивирования.
         /// </summary>
         /// <param name="filePath"></param>
-        public HaffmanLogiс(string filePath)
+        public HaffmanLogiс(byte[] fileinfo)
         {
-            FriquencyController controller = new FriquencyController(new UTF8Frequency(), filePath);
+            FriquencyController controller = new FriquencyController(new UTF8Frequency(), fileinfo);
 
             controller.SortKey();          
         }

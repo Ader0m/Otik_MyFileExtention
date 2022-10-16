@@ -11,7 +11,7 @@ namespace Otik_MyFileExtention.SymbolFrequency
         public void Task()
         {
             char[] chars;
-            chars = Encoding.UTF8.GetChars(Encoding.UTF8.GetBytes(FriquencyController.FileInfo));
+            chars = Encoding.UTF8.GetChars(FriquencyController.FileInfo);
 
             foreach (char ch in chars)
             {
