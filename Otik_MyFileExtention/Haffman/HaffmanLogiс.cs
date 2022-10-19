@@ -98,6 +98,11 @@ namespace Otik_MyFileExtention.Haffman
 
         public List<char> Decompress(ReadOnlySpan<byte> info, int dataLength)
         {
+            if (_root != null)
+            {
+                throw new Exception("Нарушена последовательность");
+            }
+            
             int size = 0;
             Node curr = _root;
             List<char> data = new List<char>();
