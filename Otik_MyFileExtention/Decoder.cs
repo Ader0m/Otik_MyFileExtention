@@ -31,6 +31,8 @@ namespace Otik_MyFileExtention
             Dictionary<char, int> freq = new Dictionary<char, int>();
             HaffmanLogiс haffmanLogic = new HaffmanLogiс();
             int dataLenght = 0;
+            string inputstring = "";
+
             Storage.IvaExtentionHeader h = new Storage.IvaExtentionHeader();
             FileStream fileStreamInput = File.OpenRead(Storage.NameFile);
             file = new byte[fileStreamInput.Length];
@@ -78,45 +80,56 @@ namespace Otik_MyFileExtention
                 Console.WriteLine("Protect " + h.Protect);
                 Console.WriteLine("StartInfoByte " + h.StartInfoByte);
                 Console.WriteLine("INFO ");
-                if (h.Arhive==1)
-                {
-                    dataLenght = BitConverter.ToInt32(file, byt);
-                    byt += 4;
-                    for(int i = byt; i < h.StartInfoByte; )
-                    {
-                        freq.Add(BitConverter.ToChar(file, i), BitConverter.ToInt32(file, i + 2));
-                        i += 6;
-                    }
-                    haffmanLogic = new HaffmanLogiс(freq);
-                }
-                foreach (var f in freq)
-                {
-                    Console.WriteLine(f.Key+" "+f.Value);
-                }
-                offset += h.StartInfoByte;
-                byt = offset;
-                count = 0;
-                while (file[byt + count] != 10)
-                    count++;
-                //Console.WriteLine(Encoding.UTF8.GetString(file, byt, count));
-                ReadOnlySpan<byte> info = new ReadOnlySpan<byte>(file, byt, count);
-                List<char> data = haffmanLogic.Decompress(info, dataLenght);
-                Console.WriteLine("AAAA");
-                foreach(char ch in data)
-                {
-                    Console.WriteLine(ch);
-                }
                 if (h.CheckSignature() && h.Version == Storage.Version)
                 {
+                    if (h.Arhive == 1)
+                    {
+                        dataLenght = BitConverter.ToInt32(file, byt);
+                        byt += 4;
+                        for (int i = byt; i < h.StartInfoByte;)
+                        {
+                            freq.Add(BitConverter.ToChar(file, i), BitConverter.ToInt32(file, i + 2));
+                            i += 6;
+                        }
+                        haffmanLogic = new HaffmanLogiс(freq);
+                    }
+                    foreach (var f in freq)
+                    {
+                        Console.WriteLine(f.Key + " " + f.Value);
+                    }
+                    offset += h.StartInfoByte;
+                    byt = offset;
+                    count = 0;
+                    while (file[byt + count] != 10)
+                        count++;
+                    ReadOnlySpan<byte> info = new ReadOnlySpan<byte>(file, byt, count);
+                    if (h.Arhive == 1)
+                    {
+
+                        List<char> data = haffmanLogic.Decompress(info, dataLenght);
+                        foreach (char c in data)
+                        {
+                            inputstring += c;
+                        }
+
+
+                    }
+
                     if (h.FileOrDirectory)
                         Directory.CreateDirectory(Directory.GetCurrentDirectory() + @"\" + h.Name);
                     else
                     {
                         fileStreamInput = File.Create(Directory.GetCurrentDirectory() + @"\" + h.Name);
                         fileStreamInput.Close();
-                        fileStreamInput = File.OpenWrite(Directory.GetCurrentDirectory() + @"\" + h.Name);
-                        fileStreamInput.Write(info);
-                        fileStreamInput.Close();
+                        if (h.Arhive == 0)
+                        {
+                            fileStreamInput = File.OpenWrite(Directory.GetCurrentDirectory() + @"\" + h.Name);
+                            fileStreamInput.Write(info);
+                            fileStreamInput.Close();
+                        }
+                        else
+                            File.WriteAllText(Directory.GetCurrentDirectory() + @"\" + h.Name, inputstring);
+
                     }
 
                 }
