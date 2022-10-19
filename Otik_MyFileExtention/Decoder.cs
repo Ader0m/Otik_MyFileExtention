@@ -5,6 +5,7 @@ using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using Otik_MyFileExtention.FileCollector;
+using Otik_MyFileExtention.Haffman;
 
 namespace Otik_MyFileExtention
 {
@@ -27,6 +28,9 @@ namespace Otik_MyFileExtention
         public void Start()
         {
             byte[] file;
+            Dictionary<char, int> freq = new Dictionary<char, int>();
+            HaffmanLogiс haffmanLogic = new HaffmanLogiс();
+            int dataLenght = 0;
             Storage.IvaExtentionHeader h = new Storage.IvaExtentionHeader();
             FileStream fileStreamInput = File.OpenRead(Storage.NameFile);
             file = new byte[fileStreamInput.Length];
@@ -64,7 +68,7 @@ namespace Otik_MyFileExtention
 
 
                 h.StartInfoByte = BitConverter.ToInt32(file, byt);
-
+                byt += 4 + 5;
 
                 Console.WriteLine("Sygnature " + Encoding.UTF8.GetString(h.Signature));
                 Console.WriteLine("bool " + h.FileOrDirectory);
@@ -74,14 +78,34 @@ namespace Otik_MyFileExtention
                 Console.WriteLine("Protect " + h.Protect);
                 Console.WriteLine("StartInfoByte " + h.StartInfoByte);
                 Console.WriteLine("INFO ");
+                if (h.Arhive==1)
+                {
+                    dataLenght = BitConverter.ToInt32(file, byt);
+                    byt += 4;
+                    for(int i = byt; i < h.StartInfoByte; )
+                    {
+                        freq.Add(BitConverter.ToChar(file, i), BitConverter.ToInt32(file, i + 2));
+                        i += 6;
+                    }
+                    haffmanLogic = new HaffmanLogiс(freq);
+                }
+                foreach (var f in freq)
+                {
+                    Console.WriteLine(f.Key+" "+f.Value);
+                }
                 offset += h.StartInfoByte;
                 byt = offset;
                 count = 0;
                 while (file[byt + count] != 10)
                     count++;
-                Console.WriteLine(Encoding.UTF8.GetString(file, byt, count));
+                //Console.WriteLine(Encoding.UTF8.GetString(file, byt, count));
                 ReadOnlySpan<byte> info = new ReadOnlySpan<byte>(file, byt, count);
-
+                List<char> data = haffmanLogic.Decompress(info, dataLenght);
+                Console.WriteLine("AAAA");
+                foreach(char ch in data)
+                {
+                    Console.WriteLine(ch);
+                }
                 if (h.CheckSignature() && h.Version == Storage.Version)
                 {
                     if (h.FileOrDirectory)

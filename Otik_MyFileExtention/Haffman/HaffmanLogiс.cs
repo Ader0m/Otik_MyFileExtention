@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Otik_MyFileExtention.SymbolFrequency;
@@ -10,10 +11,18 @@ namespace Otik_MyFileExtention.Haffman
     internal class HaffmanLogiс
     {
         private SortedDictionary<char, string> _codes;
+        private Node root;
+        private int countSymbol;
+
 
         public HaffmanLogiс()
         {
             ;
+        }
+
+        public HaffmanLogiс(Dictionary<char, int> freqs)
+        {
+            root = CreateHuffmanTree(freqs);
         }
 
         /// <summary>
@@ -24,7 +33,7 @@ namespace Otik_MyFileExtention.Haffman
         {
             FriquencyController controller = new FriquencyController(new UTF8Frequency(), fileinfo);
 
-            controller.SortKey();          
+            controller.SortKey();
         }
 
         /// <summary>
@@ -44,7 +53,7 @@ namespace Otik_MyFileExtention.Haffman
         /// </summary>
         /// <returns></returns>
         public SortedDictionary<char, string> GetHuffmanCode(Dictionary<char, int> frequencyDict)
-        {         
+        {
             return CreateHuffmanCode(CreateHuffmanTree(frequencyDict));
         }
 
@@ -52,11 +61,11 @@ namespace Otik_MyFileExtention.Haffman
         {
             List<byte> data = new List<byte>();
             byte sum = 0;
-            byte bit= 1;
+            byte bit = 1;
 
 
-            foreach(char c in content)
-            {              
+            foreach (char c in content)
+            {
                 foreach (char b in _codes[c])
                 {
                     if (b == '1')
@@ -73,13 +82,38 @@ namespace Otik_MyFileExtention.Haffman
                         sum = 0;
                         bit = 1;
                     }
-                }             
+                }
             }
 
             if (bit > 1)
                 data.Add(sum);
 
             return data.ToArray();
+        }
+
+        public List<char> Decompress(ReadOnlySpan<byte> info, int dataLength)
+        {
+            int size = 0;
+            Node curr = root;
+            List<char> data = new List<char>();
+            for (int i = 0; i < info.Length; i++)
+            {
+                for (int bit = 1; bit <= 128; bit <<= 1)
+                {
+                    bool zero = (info[i] & bit) == 0;
+                    if (zero)
+                        curr = curr.Bit0;
+                    else
+                        curr = curr.Bit1;
+                    if (curr.Bit0 != null)
+                        continue;
+                    if (size++ < dataLength)
+                        data.Add(curr.Symbol);
+                    curr = root;
+                }
+            }
+
+            return data;
         }
 
         private SortedDictionary<char, string> CreateHuffmanCode(Node root)
@@ -106,7 +140,7 @@ namespace Otik_MyFileExtention.Haffman
 
             Next(root, "");
 
-            return _codes;            
+            return _codes;
         }
 
         private Node CreateHuffmanTree(Dictionary<char, int> freqs)
