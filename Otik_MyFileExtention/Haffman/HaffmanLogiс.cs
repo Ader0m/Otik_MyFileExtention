@@ -11,8 +11,8 @@ namespace Otik_MyFileExtention.Haffman
     internal class HaffmanLogiс
     {
         private SortedDictionary<char, string> _codes;
-        private Node root;
-        private int countSymbol;
+        private Node _root;
+        private int _countSymbol = 0;
 
 
         public HaffmanLogiс()
@@ -22,7 +22,12 @@ namespace Otik_MyFileExtention.Haffman
 
         public HaffmanLogiс(Dictionary<char, int> freqs)
         {
-            root = CreateHuffmanTree(freqs);
+            _root = CreateHuffmanTree(freqs);
+
+            foreach(int count in freqs.Values)
+            {
+                _countSymbol += count;
+            }
         }
 
         /// <summary>
@@ -94,8 +99,10 @@ namespace Otik_MyFileExtention.Haffman
         public List<char> Decompress(ReadOnlySpan<byte> info, int dataLength)
         {
             int size = 0;
-            Node curr = root;
+            Node curr = _root;
             List<char> data = new List<char>();
+
+
             for (int i = 0; i < info.Length; i++)
             {
                 for (int bit = 1; bit <= 128; bit <<= 1)
@@ -109,7 +116,7 @@ namespace Otik_MyFileExtention.Haffman
                         continue;
                     if (size++ < dataLength)
                         data.Add(curr.Symbol);
-                    curr = root;
+                    curr = _root;
                 }
             }
 
@@ -191,7 +198,7 @@ namespace Otik_MyFileExtention.Haffman
                 header.Add(b[3]);
             }
 
-            ans = BitConverter.GetBytes(_codes.Count).Concat(header.ToArray()).ToArray();
+            ans = BitConverter.GetBytes(_countSymbol).Concat(header.ToArray()).ToArray();
 
             return ans;
         }
