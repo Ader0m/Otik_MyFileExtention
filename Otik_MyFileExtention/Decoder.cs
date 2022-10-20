@@ -103,16 +103,16 @@ namespace Otik_MyFileExtention
                     while (file[byt + count] != 10)
                         count++;
                     ReadOnlySpan<byte> info = new ReadOnlySpan<byte>(file, byt, count);
+                    Console.WriteLine(info.Length);
                     if (h.Arhive == 1)
                     {
 
                         List<char> data = haffmanLogic.Decompress(info, dataLenght);
                         foreach (char c in data)
                         {
-                            inputstring += c;
+                            Console.WriteLine(c);
+                            inputstring += c.ToString();
                         }
-
-
                     }
 
                     if (h.FileOrDirectory)

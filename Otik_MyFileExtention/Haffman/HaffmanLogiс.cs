@@ -23,11 +23,6 @@ namespace Otik_MyFileExtention.Haffman
         public HaffmanLogiс(Dictionary<char, int> freqs)
         {
             _root = CreateHuffmanTree(freqs);
-
-            foreach(int count in freqs.Values)
-            {
-                _countSymbol += count;
-            }
         }
 
         /// <summary>
@@ -39,6 +34,11 @@ namespace Otik_MyFileExtention.Haffman
             FriquencyController controller = new FriquencyController(new UTF8Frequency(), fileinfo);
 
             controller.SortKey();
+
+            foreach (int count in FriquencyController.FrequencyDict.Values)
+            {
+                _countSymbol += count;
+            }
         }
 
         /// <summary>
@@ -68,11 +68,16 @@ namespace Otik_MyFileExtention.Haffman
             byte sum = 0;
             byte bit = 1;
 
+            Console.WriteLine("Compress " + content.Length);
 
             foreach (char c in content)
             {
+                Console.WriteLine("content " + c);
+                Console.WriteLine("codes.value " + _codes[c]);
                 foreach (char b in _codes[c])
                 {
+                    Console.WriteLine("codes " + b);
+                    Console.WriteLine("codes.value " + _codes[c]);
                     if (b == '1')
                     {
                         sum |= bit;
@@ -93,6 +98,8 @@ namespace Otik_MyFileExtention.Haffman
             if (bit > 1)
                 data.Add(sum);
 
+            Console.WriteLine(data.Count);
+
             return data.ToArray();
         }
 
@@ -102,11 +109,16 @@ namespace Otik_MyFileExtention.Haffman
             {
                 throw new Exception("Нарушена последовательность");
             }
-            
+
             int size = 0;
             Node curr = _root;
             List<char> data = new List<char>();
 
+            if (curr.Bit0 == null)
+            {
+                data.Add(curr.Symbol);
+                return data;
+            }
 
             for (int i = 0; i < info.Length; i++)
             {
@@ -132,6 +144,12 @@ namespace Otik_MyFileExtention.Haffman
         {
             _codes = new SortedDictionary<char, string>();
 
+            if (root.Bit0 == null)
+            {
+                _codes[root.Symbol] = "0";
+                return _codes;
+            }
+
             #region LocalFunc
 
             void Next(Node node, string code)
@@ -144,7 +162,6 @@ namespace Otik_MyFileExtention.Haffman
                 {
                     Next(node.Bit0, code + "0");
                     Next(node.Bit1, code + "1");
-
                 }
             }
 

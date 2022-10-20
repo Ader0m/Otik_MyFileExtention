@@ -12,6 +12,7 @@ namespace Otik_MyFileExtention.FileCollector
         {
             if (content.Length < 1)
             {
+                FileCollectorController.Header.Arhive = 0;
                 return content;
             }
 
