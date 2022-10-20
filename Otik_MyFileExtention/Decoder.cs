@@ -82,11 +82,12 @@ namespace Otik_MyFileExtention
                 Console.WriteLine("INFO ");
                 if (h.CheckSignature() && h.Version == Storage.Version)
                 {
+                    offset += h.StartInfoByte;
                     if (h.Arhive == 1)
                     {
                         dataLenght = BitConverter.ToInt32(file, byt);
                         byt += 4;
-                        for (int i = byt; i < h.StartInfoByte;)
+                        for (int i = byt; i < offset;)
                         {
                             freq.Add(BitConverter.ToChar(file, i), BitConverter.ToInt32(file, i + 2));
                             i += 6;
@@ -97,7 +98,6 @@ namespace Otik_MyFileExtention
                     {
                         Console.WriteLine(f.Key + " " + f.Value);
                     }
-                    offset += h.StartInfoByte;
                     byt = offset;
                     count = 0;
                     while (file[byt + count] != 10)
