@@ -8,23 +8,25 @@ namespace Otik_MyFileExtention.FileCollector
 {
     internal class WriteTask : IFileTask
     {
+        const int WriteBlock = 4096;
+
         public byte[] Task(byte[] content)
         {
             FileStream fileStreamInput = File.OpenWrite(Encode.Instence.ArchivePath);
             fileStreamInput.Position = fileStreamInput.Length;
             byte[] buffer;
             int bytesRead = 0;
-            int i = 0;           
+            int i = 0;
 
-
+            Console.WriteLine("Write Task " + content.Length);
             //Записываем содержимое
-            while (i < (content.Length / 1024) + 1)
-            {           
-                buffer = content.Skip(bytesRead).Take(content.Length % 1024).ToArray();
+            while (i < content.Length)
+            {      
+                buffer = content.Skip(bytesRead).Take(content.Length % WriteBlock).ToArray();
                 fileStreamInput.Write(buffer, 0, buffer.Length);
                 bytesRead += buffer.Length;
 
-                i++;
+                i += buffer.Length;
             }
 
             //Записываем конец файла

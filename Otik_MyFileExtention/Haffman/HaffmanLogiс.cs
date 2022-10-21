@@ -115,6 +115,7 @@ namespace Otik_MyFileExtention.Haffman
                 return data;
             }
 
+
             for (int i = 0; i < info.Length; i++)
             {
                 for (int bit = 1; bit <= 128; bit <<= 1)
@@ -127,7 +128,20 @@ namespace Otik_MyFileExtention.Haffman
                     if (curr.Bit0 != null)
                         continue;
                     if (size++ < dataLength)
+                    {                       
+                        if (i % 4096 == 0)
+                        {
+                            //Console.WriteLine("Прогресс процесса " + i / info.Length * 100 + "%");
+                        }
+                        
                         data.Add(curr.Symbol);
+
+
+                    }
+                    else
+                    {
+                        break;
+                    }
                     curr = _root;
                 }
             }

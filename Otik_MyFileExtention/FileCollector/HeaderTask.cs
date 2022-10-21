@@ -10,7 +10,8 @@ namespace Otik_MyFileExtention.FileCollector
     {
         public byte[] Task(byte[] content)
         {
-            byte[] toWrite = FileCollectorController.Header.ToWrite();
+            Console.WriteLine("Header Task " + content.Length);
+            byte[] toWrite = FileCollectorController.Header.ToWrite(content.Length - FileCollectorController.Header.LengthInfo);
 
             return toWrite.Concat(content).ToArray();
         }

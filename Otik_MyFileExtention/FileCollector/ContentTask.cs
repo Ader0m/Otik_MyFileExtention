@@ -17,7 +17,7 @@ namespace Otik_MyFileExtention.FileCollector
 
             fileStreamInput.Close();
 
-
+            Console.WriteLine("content Task " + content.Length);
             return content;
         }
     }

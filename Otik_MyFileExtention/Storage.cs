@@ -10,7 +10,7 @@ namespace Otik_MyFileExtention
     {       
         private static string _nameFile = "Введите имя";
         private static readonly byte[] _signature = { 0x69, 0x76, 0x61, 0x65 };
-        private static readonly int _version = 2;
+        private static readonly int _version = 3;
 
         #region Get/Set
 
@@ -31,16 +31,19 @@ namespace Otik_MyFileExtention
             public int Arhive;
             public int Protect;
             public int StartInfoByte;
+            public int LengthInfo;
             
+
             public IvaExtentionHeader()
             {
+                Signature = new byte[4];
+                FileOrDirectory = false;
                 Name = "";
                 Version = Storage.Version;
                 Arhive = 0;
                 Protect = 0;
                 StartInfoByte = 0;
-                Signature = new byte[4];
-                FileOrDirectory = false;
+                LengthInfo = 0;           
             }
 
             /// <summary>
@@ -49,11 +52,11 @@ namespace Otik_MyFileExtention
             public int SolveStartInfoByte()
             {
                  StartInfoByte = (Name.Length * sizeof(char)) +
-                                (sizeof(int) * 4) +
+                                (sizeof(int) * 5) +
                                 4 + // byte mass
                                 1 + // bool
                                 3 + // {
-                                11; // \n
+                                12; // \n
 
                 return StartInfoByte;
             }
@@ -71,7 +74,7 @@ namespace Otik_MyFileExtention
                 return true;
             }
 
-            public byte[] ToWrite()
+            public byte[] ToWrite(int contentLenght)
             {
                 string startHeader = "\n{\n";
                 string endHeader = "}\n" + "{\n";
@@ -117,7 +120,9 @@ namespace Otik_MyFileExtention
                 AddInt(Version); AddString("\n");
                 AddInt(Arhive); AddString("\n");
                 AddInt(Protect); AddString("\n");
-                AddInt(offset + 1 + 4 + archiveHeaderLength + endHeader.Length + startHeader.Length); AddString("\n");
+                AddInt(offset + 1 + 4 + 1 + 4 + archiveHeaderLength + endHeader.Length + startHeader.Length);
+                AddString("\n");     
+                AddInt(contentLenght); AddString("\n");
                 AddString(endHeader);
 
                 fixData = new byte[offset];
@@ -140,7 +145,8 @@ namespace Otik_MyFileExtention
                     Version + "\n" +
                     Arhive + "\n" +
                     Protect + "\n" +
-                    StartInfoByte.ToString() + "\n" + "}\n" + "{\n";
+                    StartInfoByte.ToString() + "\n" +
+                    LengthInfo.ToString() + "\n" + "}\n" + "{\n";
             }
         }
     }

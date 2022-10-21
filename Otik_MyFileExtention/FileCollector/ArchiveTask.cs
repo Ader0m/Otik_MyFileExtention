@@ -30,6 +30,7 @@ namespace Otik_MyFileExtention.FileCollector
                         header = haffman.GetHaffmanHeader();
 
                         FileCollectorController.Header.StartInfoByte += header.Length;
+                        FileCollectorController.Header.LengthInfo += header.Length;
 
                         content = header.Concat(data).ToArray();
 

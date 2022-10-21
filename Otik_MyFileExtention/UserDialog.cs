@@ -106,7 +106,7 @@ namespace Otik_MyFileExtention
                             {
                                 if (!Storage.NameFile.Equals("Введите имя"))
                                 {
-                                    if (Storage.NameFile.Split(".")[1].Equals("iva"))
+                                    if (FileOrDirectory || Storage.NameFile.Split(".")[1].Equals("iva"))
                                     {
                                         Decoder.Instence.Start();
                                     }
