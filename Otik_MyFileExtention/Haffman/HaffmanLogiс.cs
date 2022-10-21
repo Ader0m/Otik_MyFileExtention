@@ -68,16 +68,11 @@ namespace Otik_MyFileExtention.Haffman
             byte sum = 0;
             byte bit = 1;
 
-            Console.WriteLine("Compress " + content.Length);
 
             foreach (char c in content)
-            {
-                Console.WriteLine("content " + c);
-                Console.WriteLine("codes.value " + _codes[c]);
+            {          
                 foreach (char b in _codes[c])
-                {
-                    Console.WriteLine("codes " + b);
-                    Console.WriteLine("codes.value " + _codes[c]);
+                {                
                     if (b == '1')
                     {
                         sum |= bit;
@@ -98,8 +93,6 @@ namespace Otik_MyFileExtention.Haffman
             if (bit > 1)
                 data.Add(sum);
 
-            Console.WriteLine(data.Count);
-
             return data.ToArray();
         }
 
@@ -114,9 +107,11 @@ namespace Otik_MyFileExtention.Haffman
             Node curr = _root;
             List<char> data = new List<char>();
 
+            //Если файл состоит из одного вида символов
             if (curr.Bit0 == null)
             {
-                data.Add(curr.Symbol);
+                for (int i = 0; i < dataLength; i++)
+                    data.Add(curr.Symbol);
                 return data;
             }
 

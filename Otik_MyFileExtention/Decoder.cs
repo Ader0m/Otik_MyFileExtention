@@ -72,20 +72,21 @@ namespace Otik_MyFileExtention
                 h.StartInfoByte = BitConverter.ToInt32(file, byt);
                 byt += 4 + 5;
 
-                Console.WriteLine("Sygnature " + Encoding.UTF8.GetString(h.Signature));
-                Console.WriteLine("bool " + h.FileOrDirectory);
-                Console.WriteLine("Name " + h.Name);
-                Console.WriteLine("Version " + h.Version);
-                Console.WriteLine("Arhive " + h.Arhive);
-                Console.WriteLine("Protect " + h.Protect);
-                Console.WriteLine("StartInfoByte " + h.StartInfoByte);
-                Console.WriteLine("INFO ");
+                //Console.WriteLine("Sygnature " + Encoding.UTF8.GetString(h.Signature));
+                //Console.WriteLine("bool " + h.FileOrDirectory);
+                //Console.WriteLine("Name " + h.Name);
+                //Console.WriteLine("Version " + h.Version);
+                //Console.WriteLine("Arhive " + h.Arhive);
+                //Console.WriteLine("Protect " + h.Protect);
+                //Console.WriteLine("StartInfoByte " + h.StartInfoByte);
+                //Console.WriteLine("INFO ");
                 if (h.CheckSignature() && h.Version == Storage.Version)
                 {
                     offset += h.StartInfoByte;
                     if (h.Arhive == 1)
                     {
                         dataLenght = BitConverter.ToInt32(file, byt);
+                        //Console.WriteLine("Data length " + dataLenght);
                         byt += 4;
                         for (int i = byt; i < offset;)
                         {
@@ -96,27 +97,29 @@ namespace Otik_MyFileExtention
                     }
                     foreach (var f in freq)
                     {
-                        Console.WriteLine(f.Key + " " + f.Value);
+                        //Console.WriteLine(f.Key + " " + f.Value);
                     }
                     byt = offset;
                     count = 0;
                     while (file[byt + count] != 10)
                         count++;
                     ReadOnlySpan<byte> info = new ReadOnlySpan<byte>(file, byt, count);
-                    Console.WriteLine(info.Length);
+                    //Console.WriteLine("info lenght " + info.Length);
                     if (h.Arhive == 1)
                     {
 
                         List<char> data = haffmanLogic.Decompress(info, dataLenght);
                         foreach (char c in data)
                         {
-                            Console.WriteLine(c);
                             inputstring += c.ToString();
                         }
                     }
 
                     if (h.FileOrDirectory)
+                    {
                         Directory.CreateDirectory(Directory.GetCurrentDirectory() + @"\" + h.Name);
+                        Console.WriteLine("Создан каталог " + h.Name);
+                    }
                     else
                     {
                         fileStreamInput = File.Create(Directory.GetCurrentDirectory() + @"\" + h.Name);
@@ -129,7 +132,7 @@ namespace Otik_MyFileExtention
                         }
                         else
                             File.WriteAllText(Directory.GetCurrentDirectory() + @"\" + h.Name, inputstring);
-
+                        Console.WriteLine("Конец процесса " + h.Name);
                     }
 
                 }

@@ -105,6 +105,7 @@ namespace Otik_MyFileExtention
                         case 3:
                             {
                                 if (!Storage.NameFile.Equals("Введите имя"))
+                                {
                                     if (Storage.NameFile.Split(".")[1].Equals("iva"))
                                     {
                                         Decoder.Instence.Start();
@@ -112,7 +113,12 @@ namespace Otik_MyFileExtention
                                     else
                                     {
                                         Console.WriteLine("Error: Можно разархивировать файл только формата .iva");
-                                    }                                
+                                    }
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Error: Введите имя");
+                                }
                                 break;
                             }
                         case 4:
@@ -135,7 +141,6 @@ namespace Otik_MyFileExtention
             catch (FormatException e)
             {
                 Console.WriteLine("Введите !номер! команды\n");
-                Console.WriteLine(e);
                 ListenMainUserInput();
             }
         }
@@ -170,7 +175,7 @@ namespace Otik_MyFileExtention
                                 break;
                             }
                         case 2:
-                            {                         
+                            {
                                 if (!Storage.NameFile.Equals("Введите имя"))
                                 {
                                     SymbolDialog symbolDialog = new SymbolDialog(new ByteFrequency());
