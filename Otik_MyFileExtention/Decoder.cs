@@ -138,16 +138,15 @@ namespace Otik_MyFileExtention
                         else
                         {
                             FileStream fs = File.OpenWrite(Directory.GetCurrentDirectory() + @"\" + h.Name);
+                            StreamWriter sr = new StreamWriter(fs);
                             foreach (char c in data)
                             {
-                                byte[] bm = BitConverter.GetBytes(c);
-                                fs.Write(bm, 0, bm.Length);
+                                sr.Write(c);
                             }
-                            fs.Close();
+                            sr.Close();
                         }
                         Console.WriteLine("Конец процесса " + h.Name);
                     }
-
                 }
                 else
                 {

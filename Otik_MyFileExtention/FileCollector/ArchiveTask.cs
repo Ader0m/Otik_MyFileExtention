@@ -22,18 +22,28 @@ namespace Otik_MyFileExtention.FileCollector
                     {
                         byte[] header;
                         byte[] data;
-                        
+                        byte[] candidat;
+
+
 
                         Haffman.HaffmanLogiс haffman = new Haffman.HaffmanLogiс(content);
                         
-                        data = haffman.GetCompressData(content);
+                        data = haffman.GetCompressData(content);                       
                         header = haffman.GetHaffmanHeader();
 
                         FileCollectorController.Header.StartInfoByte += header.Length;
                         FileCollectorController.Header.LengthInfo += header.Length;
 
-                        content = header.Concat(data).ToArray();
+                        candidat = header.Concat(data).ToArray();
 
+                        if (candidat.Length < content.Length)
+                        {
+                            content = candidat;
+                        }
+                        else
+                        {
+                            FileCollectorController.Header.Arhive = 0;
+                        }
                         break;
                     }
             }
